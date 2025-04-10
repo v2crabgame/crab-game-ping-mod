@@ -1,0 +1,47 @@
+using System;
+using System.Collections;
+using BepInEx;
+using BepInEx.IL2CPP;
+using HarmonyLib;
+using UnityEngine;
+
+[BepInPlugin("aurasigmagodv2", "PingMod", "1.0.0")]
+public class PingMod : BasePlugin
+{
+    public override void Load()
+    {
+        new Harmony("aurasigmagodv2").PatchAll();
+        GameObject obj = new GameObject("PingController");
+        obj.AddComponent<PingController>();
+        UnityEngine.Object.DontDestroyOnLoad(obj);
+    }
+}
+
+public class PingController : MonoBehaviour
+{
+    private void Awake() => StartCoroutine(PingLoop());
+
+    private void StartCoroutine(IEnumerator enumerator)
+    {
+        throw new NotImplementedException();
+    }
+
+    private IEnumerator PingLoop()
+    {
+        while (true)
+        {
+            yield return new WaitForSeconds(1f);
+            MonoBehaviourPublicInpabyInInInUnique.SendClientPing(-69);
+        }
+    }
+}
+
+[HarmonyPatch(typeof(MonoBehaviourPublicInpabyInInInUnique), "SendClientPing")]
+public class Patch_SendClientPing
+{
+    static bool Prefix(ref int param_0)
+    {
+        param_0 = -69;
+        return true;
+    }
+}
